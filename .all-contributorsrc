@@ -1,0 +1,29 @@
+{
+  "projectName": "prayer-time-app",
+  "projectOwner": "thani-sh",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": ["README.md"],
+  "imageSize": 64,
+  "commit": false,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "thani-sh",
+      "name": "Thanish",
+      "avatar_url": "https://avatars.githubusercontent.com/u/136691?v=4",
+      "profile": "https://thanish.me/",
+      "contributions": ["code", "doc", "data"]
+    },
+    {
+      "login": "N-i-z",
+      "name": "Nisma Nizam ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87540695?v=4",
+      "profile": "https://github.com/N-i-z",
+      "contributions": ["code", "data"]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": false
+}
+
