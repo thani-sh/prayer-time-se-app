@@ -1,15 +1,15 @@
 import {Appearance, useColorScheme} from 'react-native';
-import {MMKVLoader, useMMKVStorage} from 'react-native-mmkv-storage';
+import {MMKV, useMMKVString} from 'react-native-mmkv';
 
-const storage = new MMKVLoader().initialize();
+const storage = new MMKV();
 
 export type City = string;
 export type AppTheme = 'light' | 'dark';
 
 export function usePreferences() {
-  const [city, setCity] = useMMKVStorage<City>('pref-city', storage, 'Stockholm');
+  const [city, setCity] = useMMKVString('pref-city', storage);
   return {
-    city,
+    city: city ?? 'Stockholm',
     setCity,
     appTheme: useColorScheme() ?? 'dark',
     setAppTheme: (theme: AppTheme) => Appearance.setColorScheme(theme),
