@@ -1,39 +1,37 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {RouteParams} from '../types';
 import Table from './_Table';
 import Switch from './_Switch';
 import Select from './_Select';
 import {AppTheme, City, usePreferences} from '../../shared/usePreferences';
-import {useAppTheme} from '../../shared/useApptheme';
+import {useAppStyles, useAppTheme} from '../../shared/useApptheme';
 import {cities} from '@thani-sh/prayer-time-se';
+import IconButton from '../../shared/components/IconButton';
 
 const useStyles = () => {
   const theme = useAppTheme();
-  return StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: theme.pageColor,
-    },
-    screenContent: {
-      flex: 1,
-      flexDirection: 'column',
-      marginBottom: -40,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    screenBottom: {
-      marginBottom: 40,
-    },
-    bottomLink: {
-      fontSize: 15,
-      color: theme.linkColor,
-      letterSpacing: 1,
-    },
-  });
+  const appStyles = useAppStyles();
+  return {
+    ...appStyles,
+    route: StyleSheet.create({
+      container: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: -40,
+      },
+      screenBottom: {
+        marginBottom: 40,
+      },
+      bottomLink: {
+        fontSize: 15,
+        color: theme.linkColor,
+        letterSpacing: 1,
+      },
+    }),
+  };
 };
 
 export const CITIES_LIST: {value: City; label: string}[] = cities.map(city => ({
@@ -74,13 +72,13 @@ export default ({navigation}: Props) => {
   ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.screenContent}>
+    <View style={styles.page.container}>
+      <View style={styles.route.container}>
         <Table entries={entries} />
       </View>
-      <View style={styles.screenBottom}>
+      <View style={styles.route.screenBottom}>
         <Pressable onPress={gotoMainScreen}>
-          <Text style={styles.bottomLink}>tillbaka</Text>
+          <IconButton icon="tablerows" onPress={gotoMainScreen} />
         </Pressable>
       </View>
     </View>

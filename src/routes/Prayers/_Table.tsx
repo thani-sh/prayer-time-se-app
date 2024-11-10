@@ -1,5 +1,5 @@
 import React from 'react';
-import {Appearance, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {useAppTheme} from '../../shared/useApptheme';
 
 const useStyles = () => {

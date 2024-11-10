@@ -1,55 +1,44 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {usePrayerTimes} from '../../shared/usePrayerTimes';
 import {RouteParams} from '../types';
 import Table from './_Table';
-import {useAppTheme} from '../../shared/useApptheme';
+import {useAppStyles, useAppTheme} from '../../shared/useApptheme';
 import {usePreferences} from '../../shared/usePreferences';
+import IconButton from '../../shared/components/IconButton';
 
 const useStyles = () => {
   const theme = useAppTheme();
-  return StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: theme.pageColor,
-    },
-    screenContent: {
-      flex: 1,
-      flexDirection: 'column',
-      marginBottom: -40,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    screenTitle: {
-      fontSize: 42,
-      fontWeight: '600',
-      letterSpacing: 1,
-      color: theme.textColor,
-    },
-    screenSubtitle: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 10,
-    },
-    selectedDate: {
-      fontSize: 15,
-      color: theme.linkColor,
-      letterSpacing: 1,
-      textTransform: 'uppercase',
-    },
-    screenBottom: {
-      marginBottom: 40,
-    },
-    bottomLink: {
-      fontSize: 15,
-      color: theme.linkColor,
-      letterSpacing: 1,
-    },
-  });
+  const appStyles = useAppStyles();
+  return {
+    ...appStyles,
+    route: StyleSheet.create({
+      container: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: -40,
+      },
+      selectedDate: {
+        fontSize: 15,
+        color: theme.linkColor,
+        letterSpacing: 1,
+        textTransform: 'uppercase',
+      },
+      screenBottom: {
+        flexDirection: 'row',
+        marginBottom: 40,
+        gap: 16,
+      },
+      bottomLink: {
+        fontSize: 15,
+        color: theme.linkColor,
+        letterSpacing: 1,
+      },
+    }),
+  };
 };
 
 function formatDate(date: Date): string {
@@ -64,9 +53,8 @@ type Props = RouteParams<'Prayers'>;
 
 export default ({navigation}: Props) => {
   const styles = useStyles();
-  const theme = useAppTheme();
-  const {appTheme} = usePreferences();
-  const [open, setOpen] = useState(false);
+  const {appTheme, isLangSet} = usePreferences();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const entries = usePrayerTimes(date);
 
@@ -74,39 +62,43 @@ export default ({navigation}: Props) => {
     navigation.navigate('Settings', {});
   };
 
+  useEffect(() => {
+    if (!isLangSet) {
+      navigation.navigate('Welcome', {});
+    }
+  }, [isLangSet, navigation]);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.screenContent}>
-        <Text style={styles.screenTitle}>Bönetider</Text>
-        <View style={styles.screenSubtitle}>
-          <Pressable onPress={() => setOpen(true)}>
-            <Text style={styles.selectedDate}>{formatDate(date)}</Text>
+    <View style={styles.page.container}>
+      <View style={styles.route.container}>
+        <Text style={styles.text.title}>Bönetider</Text>
+        <View style={styles.text.subtitle}>
+          <Pressable onPress={() => setIsDatePickerOpen(true)}>
+            <Text style={styles.route.selectedDate}>{formatDate(date)}</Text>
           </Pressable>
         </View>
         <Table entries={entries} />
       </View>
 
-      <View style={styles.screenBottom}>
-        <Pressable onPress={gotoPreferences}>
-          <Text style={styles.bottomLink}>inställningar</Text>
-        </Pressable>
+      <View style={styles.route.screenBottom}>
+        <IconButton icon="calendar" onPress={() => setIsDatePickerOpen(true)} />
+        <IconButton icon="settings" onPress={gotoPreferences} />
       </View>
 
       <DatePicker
         modal
-        open={open}
+        open={isDatePickerOpen}
         mode="date"
         theme={appTheme}
-        textColor={theme.textColor}
         cancelText="Återställa"
         confirmText="Bekräfta"
         date={date}
         onConfirm={value => {
-          setOpen(false);
+          setIsDatePickerOpen(false);
           setDate(value);
         }}
         onCancel={() => {
-          setOpen(false);
+          setIsDatePickerOpen(false);
           setDate(new Date());
         }}
         locale={'sv'}
