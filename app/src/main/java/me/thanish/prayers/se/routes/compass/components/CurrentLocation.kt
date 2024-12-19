@@ -16,9 +16,9 @@ import com.google.android.gms.location.Priority
 import me.thanish.prayers.se.states.RequestPermission
 
 /**
- * The frequency of location updates in milliseconds.
+ * The frequency of location updates in millis.
  */
-private const val LOCATION_FREQUENCY = 1000 * 60 * 60
+private const val LOCATION_FREQUENCY = 1000 * 60
 
 /**
  * The default location to use if no location is available.
@@ -35,9 +35,6 @@ private val STOCKHOLM_LOCATION = Location("app").apply {
 fun CurrentLocation(onLocationResult: (Location?) -> Unit) {
     val context = LocalContext.current
     val client = remember { LocationServices.getFusedLocationProviderClient(context) }
-
-    // emit the default location until the user grants permission
-    onLocationResult(STOCKHOLM_LOCATION)
 
     RequestPermission(
         requestedPermissions = arrayOf(ACCESS_COARSE_LOCATION),
